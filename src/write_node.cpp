@@ -1,4 +1,4 @@
-1;5202;0c/*
+/*
  * write_node.cpp
  *
  *  Created on: Nov 13, 2015
@@ -6,8 +6,9 @@
  *   Institute: ETH Zurich, Autonomous Systems Lab
  */
 
-#include <ros/ros.h>
 #include "Write.hpp"
+
+#include <ros/ros.h>
 
 int main(int argc, char** argv) {
   ros::init(argc, argv, "write");
@@ -17,5 +18,4 @@ int main(int argc, char** argv) {
 
   ros::spin();
   return 0;
-  
 }

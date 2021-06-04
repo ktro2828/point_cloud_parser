@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package format="2">
-11;rgb:0000/2b2b/3636<name>point_cloud_parser</name>
+<name>point_cloud_parser</name>
   <version>0.0.0</version>
   <description>The package to parse point cloud with ROS</description>
 
@@ -22,10 +22,4 @@
   <exec_depend>rospy</exec_depend>
   <exec_depend>sensor_msgs</exec_depend>
 
-
-  <!-- The export tag contains other, unspecified, tags -->
-  <export>
-    <!-- Other tools can request additional information be placed here -->
-
-  </export>
 </package>
