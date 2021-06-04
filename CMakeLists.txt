@@ -40,6 +40,7 @@ include_directories(
 ## Build ##
 ###########
 add_executable(read
+  src/read_node.cpp
   src/Read.cpp
 )
 
@@ -48,6 +49,7 @@ target_link_libraries(read
 )
 
 add_executable(write
+  src/write_node.cpp
   src/Write.cpp
 )
 target_link_libraries(write
@@ -70,12 +72,12 @@ install(
     include/${PROJECT_NAME}
   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
 )
-install(
-  DIRECTORY
-    examples
-    launch
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
-)
+# install(
+#   DIRECTORY
+#     examples
+#     launch
+#   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+# )
 
 find_package(cmake_clang_tools QUIET)
 if(cmake_clang_tools_FOUND)

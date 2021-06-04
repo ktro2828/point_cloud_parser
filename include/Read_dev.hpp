@@ -38,7 +38,7 @@ namespace point_cloud_io {
     /**
      * Initialize node.
      */
-    void intialize();
+    void initialize();
 
     /**
      * Read the point cloud from a .ply or .vtk file.

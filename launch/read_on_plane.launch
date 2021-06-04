@@ -1,0 +1,20 @@
+<launch>
+    <arg name="input" default="$(find point_cloud_io)/examples/cow.ply"/>
+    <arg name="topic" default="/point_cloud" />
+    <arg name="frame" default="map" />
+    <arg name="rate" default="1.0" />
+    <arg name="gui" default="false" />
+
+    <!-- Publish point cloud_from file -->
+    <node pkg="point_cloud_io" type="read" name="read" output="screen">
+        <param name="file_path" value="$(arg input)" />
+        <param name="topic" value="$(arg topic)" />
+        <param name="frame" value="$(arg frame)" />
+        <param name="rate" value="$(arg rate)" />
+    </node>
+
+    <group if="$(arg gui)">
+        <node name="rviz" pkg="rviz" type="rviz" args="-d $(find point_cloud_io)/examples/point_clous_io.rviz" />
+    </group>
+
+</launch>

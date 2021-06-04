@@ -1,0 +1,35 @@
+<launch>
+    <arg name="topic" default="/extract_indices/output" />
+    <arg name="folder_path" default="$(find point_cloud_io)/examples/" />
+    <arg name="file_prefix" default="received_cloud" />
+    <arg name="file_ending" default="ply" />
+    <arg name="add_counter_to_path" default="false" />
+    <arg name="add_frame_id_to_path" default="false" />
+    <arg name="add_stamp_sec_to_path" default="false" />
+    <arg name="add_stamp_nsec_to_path" default="false" />
+
+    <arg name="gui" default="true" />
+
+    <include file="$(find point_cloud_io)/launch/republish_kinect.launch" />
+    <include file="$(find point_cloud_io)/launch/extract.launch">
+        <arg name="output_topic" value="$(arg topic)" />
+    </include>
+
+    <!-- Write point clouds to file -->
+    <node pkg="point_cloud_io" type="write" name="write" output="screen">
+        <param name="topic" value="$(arg topic)" />
+        <param name="folder_path" value="$(arg folder_path)" />
+        <param name="file_prefix" value="$(arg file_prefix)" />
+        <param name="file_ending" value="$(arg file_ending)" />
+        <param name="add_counter_to_path" value="$(arg add_counter_to_path)" />
+        <param name="add_stamp_sec_to_path" value="$(arg add_stamp_sec_to_path)" />
+        <param name="add_stamp_nsec_to_path" value="$(arg add_stamp_nsec_to_path)" />
+    </node>
+
+    <group if="$(arg qui)">
+        <node name="rviz"
+            pkg="rviz" type="rviz"
+            args="-d %(find point_coloud_io)/examples/point_cloud_io.rviz" />
+    </group>
+
+</launch>

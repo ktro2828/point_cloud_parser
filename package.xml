@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>point_cloud_parser</name>
+11;rgb:0000/2b2b/3636<name>point_cloud_parser</name>
   <version>0.0.0</version>
   <description>The package to parse point cloud with ROS</description>
 

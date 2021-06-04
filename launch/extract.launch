@@ -1,0 +1,64 @@
+<launch>
+    <arg name="queue_size" default="100" />
+    <arg name="points" default="/head_mount_kinect/hd/points_half_repub" />
+    <arg name="camera_info" default="/head_mount_kinect/hd/camera_info" />
+    <arg name="sensor_frame" default="/head_mount_kinect_rgb_optical_frame" />
+    <arg name="output_topic" default="/extract_indices/output" />
+
+    <!-- Manager for extraction -->
+    <arg name="manager" default="/head_mount_kinect/hd/extract_manager" />
+    <node name="$(arg manager)"
+        pkg="nodelet" type="nodelet"
+        args="manager" output="screen" />
+
+    <!-- Multi plane extrction -->
+    <node name="multi_plane_extraction"
+        pkg= "nodelet" type="nodelet"
+        args="load jsk_pcl/OrganizedMultiPlaneSegmentation $(arg manager)"
+        output= "screen" respawn="false">
+        <remap from="~input" to="$(arg points)" />
+    </node>
+
+    <!-- polygon magnifier -->
+    <node name="polygon_magnifier"
+        pkg="nodelet" type="nodelet"
+        args="load jsk_pcl_utils/PolygonMagnifier $(arg manager)"
+        output="screen" respawn="false">
+        <remap from="~input" to="mulit_plane_extraction/output_refined_polygon" />
+    </node>
+
+    <!-- plane extraction -->
+    <node name="plane_extraction"
+        pkg="nodelet" type="nodelet"
+        args="load jsk_pcl/MultiPlaneExtraction $(arg manager)"
+        output="screen" respawn="false">
+        <remap from="~input" to="$(arg points)" />
+        <remap from="~indices" to="/multi_plane_estimate/output_refined" />
+        <remap from="~input_polygons" to="/multi_plane_estimate/output_polygon" />
+        <remap from="~input_coefficients" to="/multi_plane_estimate/output_refined_coefficients" />
+        <rosparam>
+            use_async: true
+            max_queue_size: $(arg queue_size)
+            use_sensor_frame: true
+            sensor_frame: $(arg sensor_frame)
+            keep_organized: true
+            min_height: 0.001
+        </rosparam>
+    </node>
+
+    <!-- extract indices -->
+    <node name="extract_indices"
+        pkg="nodelet" type="nodelet"
+        args="load jsk_pcl/ExtractIndices $(arg manager)"
+        output="screen" respawn="false">
+        <remap from="~input" to="/plane_extraction/output" />
+        <remap from="~indices" to="/plane_extraction/output_indices" />
+        <remap from="~output" to="$(arg output_topic)" />
+        <rosparam>
+            keep_organized: true
+            approximate_sync: true
+            queue_size: $(arg queue_size)
+        </rosparam>
+    </node>
+
+</launch>

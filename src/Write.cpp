@@ -6,7 +6,7 @@
  *   Institute: ETH Zurich, Autonomous Systems Lab
  */
 
-#include "point_cloud_io/Write.hpp"
+#include "Write.hpp"
 
 // PCL
 #include <pcl/io/pcd_io.h>
@@ -17,7 +17,7 @@
 
 
 namespace point_cloud_io {
-    Write::Write(ros::NodeHandle &nodeHandle) : nodeHandle_(nodeHandle), filePrefix_("point_cloud"), fileEnding("ply") {
+    Write::Write(ros::NodeHandle &nodeHandle) : nodeHandle_(nodeHandle), filePrefix_("point_cloud"), fileEnding_("ply") {
         if (!readParameters()) {
             ros::requestShutdown();
         }

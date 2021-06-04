@@ -1,0 +1,30 @@
+<launch>
+    <arg name="queue_size" default="30" />
+    <arg name="half_step" default="2" />
+
+    <group ns="/head_mount_kinect/hd">
+        <arg name="manager" value="kinect_republished_nodelet_manager" />
+        <node name="republish_points_xyzrgb_hd"
+            pkg="nodelet" type="nodelet"
+            arg="load depth_image_proc/point_cloud_xyzrgb $(arg manager)"
+            respawn="false">
+            <remap from="rgb/camera_info" to="camera_info"/>
+            <remap from="rgb/image_rect_color" to="image_color_rect_repub" />
+            <remap from="depth_registered/image_rect" to="image_depth_rect_repub" />
+            <remap from="depth_registered/points" to="points_repub" />
+            <param name="queue_size" type="int" value="$(arg queue_size)" />
+        </node>
+        
+        <node name="hd_half"
+            pkg="nodelet" type="nodelet"
+            args="load jks_pcl/ResizePointsPublisher $(arg manager)"
+            respawn="false">
+            <remap from="~input" to="points_repub" />
+            <remap from="~output" to="points_half_repub" />
+            <param name="step_x" value="$(arg half_step)" />
+            <param name="step_y" value="$(arg half_step)" />
+            <param name="queue_size" value="$(arg queue_size)" />
+        </node>
+    </group>
+
+</launch>
