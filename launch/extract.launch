@@ -4,18 +4,13 @@
     <arg name="camera_info" default="/head_mount_kinect/hd/camera_info" />
     <arg name="sensor_frame" default="/head_mount_kinect_rgb_optical_frame" />
     <arg name="output_topic" default="/extract_indices/output" />
+    <arg name="manager" default="/head_mount_kinect/hd/kinect_republish_manager" />
 
-    <!-- Manager for extraction -->
-    <arg name="manager" default="/head_mount_kinect/hd/extract_manager" />
-    <node name="$(arg manager)"
-        pkg="nodelet" type="nodelet"
-        args="manager" output="screen" />
-
-    <!-- Multi plane extrction -->
-    <node name="multi_plane_extraction"
+    <!-- Multi plane estimate -->
+    <node name="multi_plane_estimate"
         pkg= "nodelet" type="nodelet"
         args="load jsk_pcl/OrganizedMultiPlaneSegmentation $(arg manager)"
-        output= "screen" respawn="false">
+        output= "screen">
         <remap from="~input" to="$(arg points)" />
     </node>
 
@@ -31,10 +26,10 @@
     <node name="plane_extraction"
         pkg="nodelet" type="nodelet"
         args="load jsk_pcl/MultiPlaneExtraction $(arg manager)"
-        output="screen" respawn="false">
+        output="screen">
         <remap from="~input" to="$(arg points)" />
         <remap from="~indices" to="/multi_plane_estimate/output_refined" />
-        <remap from="~input_polygons" to="/multi_plane_estimate/output_polygon" />
+        <remap from="~input_polygons" to="/polygon_magnifier/output" />
         <remap from="~input_coefficients" to="/multi_plane_estimate/output_refined_coefficients" />
         <rosparam>
             use_async: true
@@ -42,7 +37,8 @@
             use_sensor_frame: true
             sensor_frame: $(arg sensor_frame)
             keep_organized: true
-            min_height: 0.001
+            min_height: 0.4
+            max_height: 1.0
         </rosparam>
     </node>
 
@@ -50,9 +46,9 @@
     <node name="extract_indices"
         pkg="nodelet" type="nodelet"
         args="load jsk_pcl/ExtractIndices $(arg manager)"
-        output="screen" respawn="false">
+        output="screen">
         <remap from="~input" to="/plane_extraction/output" />
-        <remap from="~indices" to="/plane_extraction/output_indices" />
+        <remap from="~indices" to="/plane_extraction/output/indices" />
         <remap from="~output" to="$(arg output_topic)" />
         <rosparam>
             keep_organized: true

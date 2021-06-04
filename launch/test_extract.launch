@@ -1,0 +1,8 @@
+<launch>
+  <arg name="gui" default="true" />
+
+  <include file="$(find point_cloud_parser)/launch/republish_kinect.launch"/>
+  <include file="$(find point_cloud_parser)/launch/extract.launch" />
+
+
+</launch>

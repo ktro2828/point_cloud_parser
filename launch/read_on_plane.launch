@@ -14,7 +14,7 @@
     </node>
 
     <group if="$(arg gui)">
-        <node name="rviz" pkg="rviz" type="rviz" args="-d $(find point_cloud_io)/examples/point_clous_io.rviz" />
+        <node name="rviz" pkg="rviz" type="rviz" args="-d $(find point_cloud_io)/examples/point_clous_parser.rviz" />
     </group>
 
 </launch>

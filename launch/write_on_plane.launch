@@ -29,7 +29,7 @@
     <group if="$(arg qui)">
         <node name="rviz"
             pkg="rviz" type="rviz"
-            args="-d %(find point_coloud_io)/examples/point_cloud_io.rviz" />
+            args="-d %(find point_coloud_io)/examples/point_cloud_parser.rviz" />
     </group>
 
 </launch>
